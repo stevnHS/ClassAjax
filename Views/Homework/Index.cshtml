@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "AJAX Homework";
+}
+
+<div class="container">
+    <div class="row row-cols-2" id="container">
+    
+</div>
+</div>
+@section Scripts {
+    <script src="~/js/travel.js"></script>
+
+    <script>
+        const container = document.querySelector('#container');
+
+        // 畫面處理
+        const sections = spots.CommonFormat.Section;
+
+        const cards = sections.map(section => {
+            const { stitle, xbody, address, file } = section;
+            return (`
+               <div class="col card p-1 m-3" style="width: 18rem;">
+                    <img src="${ file.img.text || file.img[0].text}" class="card-img-top" alt="${file.img["@@description"] || file.img['@@description']}" width=300 height=200>
+                    <div class="card-body">
+                        <h2 class="card-title"><strong>${stitle}</strong></h2>
+                        <p class="card-text">${xbody.length>100?xbody.substring(0,100).concat('...'):xbody}</p>
+                    </div>
+                </div>`
+            );
+        });
+
+        container.innerHTML = cards.join('');
+
+
+    </script>
+}

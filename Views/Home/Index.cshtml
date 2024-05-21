@@ -1,0 +1,121 @@
+﻿@model IEnumerable<ClassAjax.Models.Address>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<ul id="list"></ul>
+<table class="table table-dark table-striped-columns" id="tt">
+    <thead>
+        <tr>
+            <th>名字</th>
+            <th>年資</th>
+            <th>薪水</th>
+        </tr>
+    </thead>
+</table>
+<ul>
+    @foreach (var address in Model)
+    {
+        <li>@address.City</li>
+    }
+</ul>
+<select id="selectCities">
+    
+</select>
+@section Scripts {
+    <script>
+        // function printSomething(data) {
+        //     const promise = new Promise(function (resolve, reject) {
+        //         if (data === 'B') reject(data + '被reject了');
+        //         setTimeout(() => resolve(data), 1000);
+        //     })
+        //     return promise;
+        // }
+
+        // printSomething('A').then(data => {
+        //     console.log(data);
+        //     return printSomething('B');
+        // }).then(data => {
+        //     console.log(data);
+        //     return printSomething('C');
+        // // }, data => {
+        // //     console.log(data+'被reject');
+        // //     return printSomething('C');
+        // }).then(data => {
+        //     console.log(data);
+        // // }).catch(()=>{
+        // //     console.log('被我catch，OUT')
+        // }).finally(() => console.log('END'));
+
+        // (async () => {
+        //     try {
+        //         let data = await printSomething('A');
+        //         console.log(data);
+        //     } catch (err) {
+        //         console.log(err);
+        //     }
+        //     try {
+        //         data = await printSomething('B');
+        //         console.log(data);
+        //     } catch (err) {
+        //         console.log(err);
+        //     }
+        //     try {
+        //         data = await printSomething('C');
+        //         console.log(data);
+        //     } catch (err) {
+        //         console.log(err);
+
+        //     } finally {
+        //         console.log('END')
+        //     }
+        // })();
+
+        const emp = {
+            "employees": [
+                { "name": "Tom", "workYears": 3, "salary": 35000 },
+                { "name": "Jack", "workYears": 5, "salary": 40000 },
+                { "name": "Mary", "workYears": 7, "salary": 45000 },
+            ]
+        };
+        for (let person of emp.employees) {
+            console.log(person.name + ' ' + person.workYears + ' ' + person.salary);
+        }
+
+        const ul = document.querySelector('#list');
+        const df = document.createDocumentFragment();
+        emp.employees.forEach(e => {
+            const li = document.createElement('li');
+            li.textContent = e.name;
+            df.appendChild(li);
+        });
+        ul.appendChild(df);
+
+        const tt = document.querySelector('#tt');
+
+        const record = emp.employees.map((e) => {
+            // 解構賦值
+            const { name, workYears, salary } = e;
+            return (`<tr><td>${name}</td><td>${workYears}</td><td>${salary}</td></tr>`)
+        });
+        tt.innerHTML += record.join('');
+
+
+        // Cities 選單
+        const select = document.querySelector('#selectCities');
+        (async()=>{
+            const responseCities = await fetch('@Url.Content("~/classapi/index")')
+            if (!responseCities.ok) { console.log('錯誤:' + responseCities.status); return; };
+            const datas = await responseCities.json();
+            const cities = datas.map(city => `<option value="${city}">${city}</option>`)
+            select.innerHTML = cities.join('');
+        })();
+        
+        
+    </script>
+}

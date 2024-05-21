@@ -1,0 +1,34 @@
+﻿
+<button class="btn-primary" id="btnActive">啟動 AJAX</button>
+<div id="divResult">
+    結果顯示在這邊
+</div>
+
+@section Scripts {
+    <script>
+        const btnActive = document.querySelector('#btnActive')
+        const divResult = document.querySelector('#divResult')
+
+        // btnActive.addEventListener('click', () => {
+        //     fetch('@Url.Content("~/classApi/first")')
+        //         .then(response => response.text())
+        //         .then(data => divResult.innerHTML = `<h2>${data}</h2>`);
+
+        //     btnActive.textContent = "啟動完成";
+        // });
+
+        btnActive.addEventListener('click', async () => {
+            try {
+                const response = await fetch('@Url.Content("~/classApi/first")');
+                if (!response.ok) throw new Error(`${ response.status }`);
+                const data = await response.text();
+                divResult.innerHTML = `<h2>${data}</h2>`;
+            }catch(error){
+                divResult.innerHTML = `<h2>${error.message}</h2>`
+            }
+            
+
+            btnActive.textContent = "啟動完成";
+        });
+    </script>
+}
