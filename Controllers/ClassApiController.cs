@@ -49,6 +49,13 @@ namespace ClassAjax.Controllers
             return Content($"id:{id},你好{name},今年{age}歲");
         }
 
-        
+        public IActionResult checkAccount(MemberDTO member)
+        {
+            if (string.IsNullOrEmpty(member.userName))
+            {
+                member.userName = "guest";
+            }
+            return Content($"Hello {member.userName}，{member.Age} 歲了，電子郵件是 {member.Email}", "text/html", System.Text.Encoding.UTF8);
+        }
     }
 }
