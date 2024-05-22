@@ -15,6 +15,17 @@ namespace ClassAjax.Controllers
             var cities = _context.Addresses.Select(a => a.City).Distinct();
             return Json(cities);
         }
+        public IActionResult CitiesByDistrict(string city)
+        {
+            return Json(_context.Addresses.Where(x => x.City == city)
+                .Select(c => c.SiteId).Distinct());
+        }
+        public IActionResult RoadsByDistrict(string district)
+        {
+            return Json(_context.Addresses.Where(x => x.SiteId == district)
+                .Select(d => d.Road).Distinct());
+        }
+
         public IActionResult Avatar(int id = 1)
         {
 
@@ -37,5 +48,7 @@ namespace ClassAjax.Controllers
 
             return Content($"id:{id},你好{name},今年{age}歲");
         }
+
+        
     }
 }

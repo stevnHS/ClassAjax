@@ -36,5 +36,9 @@ namespace ClassAjax.Controllers
         {
             return View();
         }
+        public IActionResult Register()
+        {
+            return View();
+        }
     }
 }

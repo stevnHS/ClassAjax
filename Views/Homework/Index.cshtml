@@ -2,6 +2,10 @@
     ViewData["Title"] = "AJAX Homework";
 }
 
+<select id="selCities"></select>
+<select id="selDistricts"></select>
+<select id="selRoads"></select>
+
 <div class="container">
     <div class="row row-cols-1 row-cols-md-3 g-4" id="container">
     </div>
@@ -10,23 +14,58 @@
     <script src="~/js/travel.js"></script>
 
     <script>
+        // Select
+        const selCities = document.querySelector('#selCities');
+        const selDistricts = document.querySelector('#selDistricts');
+        const selRoads = document.querySelector('#selRoads');
+
+        (async () => {
+            const resCities = await fetch('@Url.Content("~/classApi/Index")');
+            const data = await resCities.json();
+            const cities =  data.map(city => `<option value="${city}">${city}</option>`)
+            selCities.innerHTML = cities.join('');
+
+            await loadDistricts();
+            await loadRoads();
+        })();
+
+        async function loadDistricts()  {
+            const url = `@Url.Content("~/classApi/CitiesByDistrict")?city=${selCities.options[selCities.selectedIndex].value}`;
+            const resDistrict = await fetch(url);
+            const data = await resDistrict.json();
+            const districts = data.map(district => `<option value="${district}">${district}</option>`)
+
+            selDistricts.innerHTML = districts.join('');
+        };
+        async function loadRoads()  {
+            const url = `@Url.Content("~/classApi/RoadsByDistrict")?district=${selDistricts.options[selCities.selectedIndex].value}`;
+            const resRoad = await fetch(url);
+            const data = await resRoad.json();
+            const roads = data.map(district => `<option value="${district}">${district}</option>`)
+
+            selRoads.innerHTML = roads.join('');
+        };
+
+        selCities.addEventListener('change', loadDistricts);
+        selDistricts.addEventListener('change', loadRoads);
+
+        // Section Cards
         const container = document.querySelector('#container');
 
-        // 畫面處理
         const sections = spots.CommonFormat.Section;
 
         const cards = sections.map(section => {
             const { stitle, xbody, address, file } = section;
             return (`
-            <div class="col">
-               <div class="card p-1 m-2 h-100" style="width: 18rem;">
-                    <img src="${ file.img.text || file.img[0].text}" class="card-img-top" alt="${file.img["@@description"] || file.img['@@description']}" width=300 height=200>
-                    <div class="card-body">
-                        <h4 class="card-title"><strong>${stitle}</strong></h4>
-                        <p class="card-text">${xbody.length>150?xbody.substring(0,150).concat('...'):xbody}</p>
+                <div class="col">
+                    <div class="card p-1 m-2 h-100" style="width: 18rem;">
+                        <img src="${file.img.text || file.img[0].text}" class="card-img-top" alt="${file.img["@@description"] || file.img['@@description']}" width=300 height=200>
+                        <div class="card-body">
+                            <h4 class="card-title"><strong>${stitle}</strong></h4>
+                            <p class="card-text">${xbody.length > 150 ? xbody.substring(0, 150).concat('...') : xbody}</p>
+                        </div>
                     </div>
-                </div>
-            </div>`
+                </div>`
             );
         });
 
