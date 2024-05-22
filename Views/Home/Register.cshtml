@@ -6,7 +6,7 @@
     <div class="col-3"></div>
     <div class="col-6">
         <h1>Register</h1>
-        <form method="post" action="~/api/register">
+        <form method="post" action="~/api/register" id="userForm">
             <div class="mb-3">
                 <label for="InputName" class="form-label">姓名</label>
                 <input type="text" class="form-control" id="InputName" name="userName">
@@ -29,9 +29,6 @@
     <div class="col-3"></div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{
@@ -45,11 +42,28 @@
         const inpAge = document.querySelector('#InputAge');
         btnSubmit.addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
-            console.log(inpName.value);
-            const url = `@Url.Content("~/classapi/register/")?email=${inpEmail.value}&age=${inpAge.value}&name=${inpName.value}`;
-            const response = await fetch(url);
+            //將資料放進FormData
+            const myForm = document.querySelector('#userForm');
+            const formData = new FormData(myForm);
+            //formData.append("password", "12345678");
+            //讀出formData中的資料
+            //for(const pair of formData.entries()){
+            //    console.log(`${pair[0]}:${pair[1]}`);
+            //}
+            const url = '@Url.Content("~/classapi/register/")';
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData
+            });
             const data = await response.text();
             divResult.textContent = data;
+                            //console.log(inpName.value);
+
+            //const url = `@Url.Content("~/api/register/")?email=${inpEmail.value}&age=${inpAge.value}&name=${inpName.value}`;
+            //const response =  await fetch(url);
+            //const data = await response.text();
+            //divResult.textContent = data;
         })
+                
     </script>
 }
