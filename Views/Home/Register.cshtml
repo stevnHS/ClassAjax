@@ -3,32 +3,30 @@
 <h4>MemberDTO</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Register">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="userName" class="control-label">
-                    姓名:
-                </label>
-                <input asp-for="userName" class="form-control" />
-                <span asp-validation-for="userName" class="text-danger"></span>
+    <div class="col-3"></div>
+    <div class="col-6">
+        <h1>Register</h1>
+        <form method="post" action="~/api/register">
+            <div class="mb-3">
+                <label for="InputName" class="form-label">姓名</label>
+                <input type="text" class="form-control" id="InputName" name="userName">
+
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label">電子郵件:</label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+            <div class="mb-3">
+                <label for="InputEmail" class="form-label">電子郵件</label>
+                <input type="email" class="form-control" id="InputEmail" name="email">
             </div>
-            <div class="form-group">
-                <label asp-for="Age" class="control-label">年紀:</label>
-                <input asp-for="Age" class="form-control" />
-                <span asp-validation-for="Age" class="text-danger"></span>
+            <div class="mb-3">
+                <label for="InputAge" class="form-label">年紀</label>
+                <input type="number" class="form-control" id="InputAge" name="age">
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" id="buttonSubmit" />
-            </div>
+
+            <button type="submit" class="btn btn-primary" id="buttonSubmit">送出</button>
         </form>
         <div id="div1" class="alert alert-info mt-3"></div>
+
     </div>
+    <div class="col-3"></div>
 </div>
 
 <div>
@@ -43,12 +41,12 @@
         const divResult = document.querySelector('#div1');
         const btnSubmit = document.querySelector('#buttonSubmit');
         const inpName = document.querySelector('#InputName');
-        const InpEmail = document.querySelector('#InputEmail');
-        const InpAge = document.querySelector('#InputAge');
+        const inpEmail = document.querySelector('#InputEmail');
+        const inpAge = document.querySelector('#InputAge');
         btnSubmit.addEventListener('click', async (evt) => {
             evt.preventDefault(); //防止預設行為的發生
             console.log(inpName.value);
-            const url = `@Url.Content("~/api/register/")?email=${inpEmail.value}&age=${inpAge.value}&name=${inpName.value}`;
+            const url = `@Url.Content("~/classapi/register/")?email=${inpEmail.value}&age=${inpAge.value}&name=${inpName.value}`;
             const response = await fetch(url);
             const data = await response.text();
             divResult.textContent = data;

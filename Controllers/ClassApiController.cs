@@ -49,7 +49,8 @@ namespace ClassAjax.Controllers
             return Content($"id:{id},你好{name},今年{age}歲");
         }
 
-        public IActionResult checkAccount(MemberDTO member)
+        //public IActionResult Register(string userName, string email, int age = 20)
+        public IActionResult Register(MemberDTO member)
         {
             if (string.IsNullOrEmpty(member.userName))
             {
