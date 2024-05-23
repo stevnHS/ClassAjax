@@ -1,0 +1,8 @@
+﻿@section Scripts {
+    <script>
+        (async () => {
+            const a = await fetch('https://localhost:7097/api/Categories');
+            console.log(await a.json());
+        })()
+    </script>
+}

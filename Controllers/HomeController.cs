@@ -40,5 +40,9 @@ namespace ClassAjax.Controllers
         {
             return View();
         }
+        public IActionResult CorsPolicy()
+        {
+            return View();
+        }
     }
 }
