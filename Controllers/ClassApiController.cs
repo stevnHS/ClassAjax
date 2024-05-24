@@ -1,5 +1,6 @@
 ﻿using ClassAjax.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ClassAjax.Controllers
@@ -7,9 +8,11 @@ namespace ClassAjax.Controllers
     public class ClassApiController : Controller
     {
         private readonly MyDB2Context _context;
-        public ClassApiController(MyDB2Context context)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public ClassApiController(MyDB2Context context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
         public IActionResult Index()
         {
@@ -50,32 +53,29 @@ namespace ClassAjax.Controllers
             return Content($"id:{id},你好{name},今年{age}歲");
         }
 
-        //public IActionResult Register(string userName, string email, int age = 20)
-        public IActionResult Register(Member member, IFormFile avatar)
-        {
-            if (string.IsNullOrEmpty(member.Name))
-            {
-                member.Name = "guest";
-            }
-
-            //取得上傳檔案的資訊
-            string info = $"{avatar.FileName} - {avatar.Length} - {avatar.ContentType}";
-
-            return Content(info, "text/plain", System.Text.Encoding.UTF8);
-            //寫進資料庫
-            //_context.Members.Add(member);
-            //_context.SaveChanges();
-
-            // return Content($"Hello {member.Name}，{member.Age} 歲了，電子郵件是 {member.Email}", "text/html", System.Text.Encoding.UTF8);
-        }
+        
 
         public IActionResult checkAccount(string name)
         {
             if(name.IsNullOrEmpty() || _context.Members.Any(x=>x.Name == name))
             {
-                return Content("帳號已存在");
+                return Content("帳號已存在", "text/plain", System.Text.Encoding.UTF8);
             }
-            return Content("帳號可以使用");
+            return Content("帳號可以使用", "text/plain", System.Text.Encoding.UTF8);
+        }
+
+        //public IActionResult Register(string userName, string email, int age = 20)
+        [HttpPost]
+        public IActionResult Register(Member member, IFormFile FileName)
+        {
+            string uploadPath = Path.Combine(_hostEnvironment.WebRootPath, "uploads", FileName.FileName);
+            string info = uploadPath;
+            using (var fileStream = new FileStream(uploadPath, FileMode.Create))
+            {
+                FileName.CopyTo(fileStream);
+            }
+
+            return Content(info, "text/plain", System.Text.Encoding.UTF8);
         }
     }
 }

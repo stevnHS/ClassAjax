@@ -1,5 +1,9 @@
 ﻿@model ClassAjax.Models.Member
 
+@{
+    ViewData["Title"] = "HW2";
+}
+
 <h4>檢查帳號是否存在</h4>
 <hr />
 <div class="row">
@@ -24,7 +28,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="送出" class="btn btn-primary" />
+                <input type="submit" value="送出" class="btn btn-primary" id="send" />
             </div>
             <div id="div1" class="alert alert-info mt-3"></div>
         </form>
@@ -38,7 +42,10 @@
     }
 
     <script>
+        // 檢查帳號是否合法
         const inpName = document.querySelector('#Name');
+        const inpEmail = document.querySelector('#Email');
+        const inpAge = document.querySelector('#Age');
         const divCheckName = document.querySelector('#divCheckName');
         inpName.addEventListener('blur', async function() {
             const url = `@Url.Content("~/classapi/checkAccount")?name=${this.value}`
@@ -46,6 +53,14 @@
             divCheckName.textContent = (await isNameLegaled.text());
         });
 
+        // 送出
+        const btnSend = document.querySelector('#send');
+        const divOutput = document.querySelector('#div1')
 
+        btnSend.addEventListener('click', (e) => {
+            e.preventDefault();
+            divOutput.textContent = `姓名: ${inpName.value} - 電子郵件: ${inpEmail.value} -                     年紀: ${inpAge.value}`;
+        
+        });
     </script>
 }
