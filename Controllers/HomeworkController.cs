@@ -4,9 +4,17 @@ namespace ClassAjax.Controllers
 {
     public class HomeworkController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult HW2()
+        {
+            return View();
+        }
+        
     }
 }

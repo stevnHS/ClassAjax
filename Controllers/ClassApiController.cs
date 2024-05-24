@@ -1,5 +1,6 @@
 ﻿using ClassAjax.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClassAjax.Controllers
 {
@@ -66,6 +67,15 @@ namespace ClassAjax.Controllers
             //_context.SaveChanges();
 
             // return Content($"Hello {member.Name}，{member.Age} 歲了，電子郵件是 {member.Email}", "text/html", System.Text.Encoding.UTF8);
+        }
+
+        public IActionResult checkAccount(string name)
+        {
+            if(name.IsNullOrEmpty() || _context.Members.Any(x=>x.Name == name))
+            {
+                return Content("帳號已存在");
+            }
+            return Content("帳號可以使用");
         }
     }
 }
