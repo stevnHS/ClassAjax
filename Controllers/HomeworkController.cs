@@ -19,5 +19,9 @@ namespace ClassAjax.Controllers
         {
             return View();
         }
+        public IActionResult HW4()
+        {
+            return View();
+        }
     }
 }

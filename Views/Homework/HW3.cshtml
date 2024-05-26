@@ -11,43 +11,36 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="HW3" id="userForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">姓名</label>
                 <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div id="divCheckName" class="alert alert-warning mt-3"></div>
 
             <div class="form-group">
                 <label asp-for="Email" class="control-label">電子郵件</label>
                 <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Password" class="control-label">密碼</label>
                 <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label">密碼確認</label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <label for="PasswordCheck" class="control-label">密碼確認</label>
+                <input name="PasswordCheck" id="PasswordCheck" class="form-control" />
             </div>
+            <div id="divCheckPwd" class="alert alert-warning mt-3" hidden>必須與密碼相同</div>
+
             <div class="form-group">
                 <label asp-for="Age" class="control-label">年紀</label>
                 <input asp-for="Age" class="form-control" />
-                <span asp-validation-for="Age" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="FileName" class="form-label">頭像</label>
                 <input asp-for="FileName" type="file" class="form-control" />
-                <span asp-validation-for="FileName" class="text-danger"></span>
             </div>
-
-
 
             <div class="form-group">
                 <input type="submit" value="送出" class="btn btn-primary" id="send" />
@@ -67,17 +60,32 @@
     <script>
 
         // 檢查帳號是否合法
-        {
-            const inpName = document.querySelector('#Name');
-            const inpEmail = document.querySelector('#Email');
-            const inpAge = document.querySelector('#Age');
-            const divCheckName = document.querySelector('#divCheckName');
-            inpName.addEventListener('blur', async () => {
-                const url = `@Url.Content("~/classApi/checkAccount")?name=${inpName.value}`
-                const isNameLegaled = await fetch(url);
-                divCheckName.textContent = (await isNameLegaled.text());
-            });
-        }
+
+        const inpName = document.querySelector('#Name');
+        const inpEmail = document.querySelector('#Email');
+        const inpAge = document.querySelector('#Age');
+        const divCheckName = document.querySelector('#divCheckName');
+        inpName.addEventListener('blur', async () => {
+            const url = `@Url.Content("~/classApi/checkAccount")?name=${inpName.value}`
+            const isNameLegaled = await fetch(url);
+            divCheckName.textContent = (await isNameLegaled.text());
+        });
+
+
+        // 檢查密碼是否相同
+
+        const inpPwd = document.querySelector('#Password');
+        const inpPwdC = document.querySelector('#PasswordCheck');
+        const alertPwd = document.querySelector('#divCheckPwd');
+
+        inpPwdC.addEventListener('blur', () =>{
+            if (inpPwd.value !== inpPwdC.value) {
+                alertPwd.removeAttribute('hidden');
+                return;
+            }
+            alertPwd.setAttribute('hidden','');
+        });
+
 
         // 送出並註冊
         const btnSend = document.querySelector('#send');

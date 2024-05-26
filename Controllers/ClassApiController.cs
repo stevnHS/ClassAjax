@@ -53,11 +53,11 @@ namespace ClassAjax.Controllers
             return Content($"id:{id},你好{name},今年{age}歲");
         }
 
-        
+
 
         public IActionResult checkAccount(string name)
         {
-            if(name.IsNullOrEmpty() || _context.Members.Any(x=>x.Name == name))
+            if (name.IsNullOrEmpty() || _context.Members.Any(x => x.Name == name))
             {
                 return Content("帳號已存在", "text/plain", System.Text.Encoding.UTF8);
             }
@@ -68,12 +68,14 @@ namespace ClassAjax.Controllers
         [HttpPost]
         public IActionResult Register(Member member, IFormFile FileName)
         {
+            // 照片存起來
             string uploadPath = Path.Combine(_hostEnvironment.WebRootPath, "uploads", FileName.FileName);
             string info = uploadPath;
             using (var fileStream = new FileStream(uploadPath, FileMode.Create))
             {
                 FileName.CopyTo(fileStream);
             }
+            // 存入資料庫
 
             return Content(info, "text/plain", System.Text.Encoding.UTF8);
         }
