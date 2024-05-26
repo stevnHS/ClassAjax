@@ -4,8 +4,7 @@
     ViewData["Title"] = "HW3";
 }
 
-<h1>HW3</h1>
-
+<h1>作業 3</h1>
 <h4>會員註冊</h4>
 <hr />
 <div class="row">
@@ -38,8 +37,8 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="FileName" class="form-label">頭像</label>
-                <input asp-for="FileName" type="file" class="form-control" />
+                <label for="avatar" class="form-label">頭像</label>
+                <input name="avatar" id="avatar" type="file" class="form-control" />
             </div>
 
             <div class="form-group">
@@ -60,7 +59,6 @@
     <script>
 
         // 檢查帳號是否合法
-
         const inpName = document.querySelector('#Name');
         const inpEmail = document.querySelector('#Email');
         const inpAge = document.querySelector('#Age');
@@ -73,7 +71,6 @@
 
 
         // 檢查密碼是否相同
-
         const inpPwd = document.querySelector('#Password');
         const inpPwdC = document.querySelector('#PasswordCheck');
         const alertPwd = document.querySelector('#divCheckPwd');
@@ -95,7 +92,7 @@
             const myForm = document.querySelector('#userForm');
             const formData = new FormData(myForm);
 
-            // // 註冊到資料庫
+            // 註冊到資料庫
             const url = '@Url.Content("~/classApi/register/")';
             const response = await fetch(url, {
                 method: 'POST',
